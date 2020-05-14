@@ -134,7 +134,7 @@
         },
         beforeCreate() {
           this.identifier = document.querySelectorAll('.' + this.searchInputClass).length;
-        }
+        },
         mounted() {
             window.addEventListener('click', e => this.handleClickOutsideTagList(e));
         },
