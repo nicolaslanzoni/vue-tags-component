@@ -36,6 +36,7 @@
                     <input
                         class="tags__search"
                         type="text"
+                        v-bind:id="identifier"
                         v-model="search"
                         tabindex="-1"
                         :placeholder="computedPlaceholder"
@@ -126,10 +127,14 @@
                 tagClass: 'tags__list-item',
                 tagFocusedClass: 'tags__list-item--focused',
                 tagListElementHeight: 34,
+                identifier: 0,
                 newTagColor: null,
                 searchInputClass: 'tags__search',
             };
         },
+        beforeCreate() {
+          this.identifier = document.querySelectorAll('.' + this.searchInputClass).length;
+        }
         mounted() {
             window.addEventListener('click', e => this.handleClickOutsideTagList(e));
         },
@@ -173,7 +178,7 @@
         },
         methods: {
             onTagSelect(e) {
-                setTimeout(() => document.querySelector('.' + this.searchInputClass).focus(), 100);
+                setTimeout(() => document.querySelector(`.${this.searchInputClass}#${this.identifier}`).focus(), 100);
                 e.stopPropagation();
 
                 if (!this.tagListActive) {
