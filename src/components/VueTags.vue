@@ -36,7 +36,6 @@
                     <input
                         class="tags__search"
                         type="text"
-                        v-bind:id="identifier"
                         v-model="search"
                         tabindex="-1"
                         :placeholder="computedPlaceholder"
@@ -137,6 +136,8 @@
         },
         mounted() {
             window.addEventListener('click', e => this.handleClickOutsideTagList(e));
+            // $('.tags__active').on('click', e => this.handleClickOutsideTagList(e));
+            $('.tags__search').on('click', e => this.handleClickOutsideTagList(e));
         },
         updated() {
             if (this.search.length > 0) {
@@ -178,7 +179,7 @@
         },
         methods: {
             onTagSelect(e) {
-                setTimeout(() => document.querySelector(`.${this.searchInputClass}#${this.identifier}`).focus(), 100);
+                setTimeout(() => this.$el.querySelector(`.${this.searchInputClass}`).focus(), 100);
                 e.stopPropagation();
 
                 if (!this.tagListActive) {
@@ -292,9 +293,19 @@
                 }
             },
             handleClickOutsideTagList(e) {
+               let input = this.$el.querySelector(`.${this.searchInputClass}`);
+               console.info(e.target);
+               console.info(input);
+
+
                 if (e.target.closest('.tags__list')) {
+
                     return;
                 }
+                if (input == e.target) {
+                  this.$emit('on-tag-list-closed');
+                }
+                  // this.$emit('on-tag-list-closed');
 
                 if (this.tagListActive) {
                     this.$emit('on-tag-list-closed');
@@ -373,7 +384,7 @@
             border-radius: 3px;
             border: 1px solid #cfcfcf;
             position: relative;
-            z-index: 1;
+            // z-index: 1;
 
             &--tag-list-active {
                 border-radius: 3px 3px 0 0;
@@ -414,6 +425,8 @@
             border-top: none;
             border-radius: 0 0 3px 3px;
             background-color: #f5f5f5;
+            z-index: 1;
+            position: absolute;
 
             span {
                 color: #aaa;
@@ -468,7 +481,7 @@
             position: absolute;
             top: 0;
             left: 0;
-            z-index: 0;
+            // z-index: 0;
             border-radius: 3px;
 
             &--tag-list-active {
@@ -523,5 +536,72 @@
 
         }
 
+    }
+</style>
+<style>
+    .tags {
+        width: auto !important;
+    }
+    .tag__name {
+        font-size: 11px !important;
+
+    }
+    .tags__list-item {
+        border-top: 1px solid lightgrey;
+    }
+    .tags__list-item-tag {
+        background-color: transparent !important;
+    }
+
+    .tags__list-item-tag  > span {
+
+        color: black !important;
+        font-weight: normal !important;
+    }
+    .tags__list {
+        max-height: 350px;
+        display: block !important;
+        overflow-y: auto;
+    }
+    .tags__list > span {
+        -webkit-appearance: textfield;
+    }
+    .tags__shadow--tag-list-active {
+        box-shadow: 2px 2px 6px 0px rgba(0, 0, 0, 0.25) !important;
+    }
+    .tags__search-block:before {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: -webkit-fill-available;
+        height: -webkit-fill-available;
+        /* background-color: red; */
+        z-index: -1;
+        content: ' ';
+        margin: 7px 7px 7px 7px;
+    }
+
+    .tags__search {
+        border: 0px;
+        background-color: transparent;
+        overflow-x: hidden;
+    }
+    .tags__active {
+        flex-flow: row wrap !important;
+        justify-content: flex-start !important;
+        overflow-x: hidden !important;
+        overflow-y: hidden;
+        border-radius: 5px 5px 5px 5px !important;
+        max-height: 2.5em;
+        cursor: text;
+    }
+    .tags__search-block {
+        min-width: 10% ;
+    }
+
+    .tags__active--tag-list-active{
+        flex-flow: row wrap !important;
+        overflow-x: visible !important;
+        max-height: none;
     }
 </style>
