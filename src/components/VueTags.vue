@@ -294,8 +294,8 @@
             },
             handleClickOutsideTagList(e) {
                let input = this.$el.querySelector(`.${this.searchInputClass}`);
-               console.info(e.target);
-               console.info(input);
+               // console.info(e.target);
+               // console.info(input);
 
 
                 if (e.target.closest('.tags__list')) {
